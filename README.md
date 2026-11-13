@@ -1,4 +1,4 @@
-# BookManagementApp
+# BookManagementApp 
 
 A deliberately small book list app built with HTML, CSS, and JavaScript, a FastAPI backend, and SQLite 3.
 
