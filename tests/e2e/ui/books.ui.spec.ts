@@ -24,8 +24,7 @@ test.describe('Book list UI', { tag: '@ui' }, () => {
       await expect(booksPage.authorInput).toHaveAttribute('maxlength', String(LIMITS.author));
       await expect(booksPage.titleInput).toHaveAttribute('required', '');
       await expect(booksPage.authorInput).toHaveAttribute('required', '');
-      const options = await booksPage.statusSelect.locator('option').allTextContents();
-      expect(options).toEqual([...READING_STATUSES]);
+      await expect(booksPage.statusSelect.locator('option')).toHaveText([...READING_STATUSES]);
     });
 
     test('lists books that already exist, newest first', async ({ booksPage, booksApi }) => {
