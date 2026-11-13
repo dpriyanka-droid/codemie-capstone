@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BookManagementApp</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <main class="page">
+      <header class="page-header">
+        <p class="eyebrow">A small reading list</p>
+        <h1>BookManagementApp</h1>
+        <p class="intro">Keep track of a few books you want to read.</p>
+      </header>
+
+      <section class="panel" aria-labelledby="add-heading">
+        <h2 id="add-heading">Add a book</h2>
+        <form id="book-form">
+          <label>
+            Title
+            <input id="title" name="title" maxlength="200" required />
+          </label>
+          <label>
+            Author
+            <input id="author" name="author" maxlength="120" required />
+          </label>
+          <label>
+            Reading status
+            <select id="status" name="status">
+              <option>Want to Read</option>
+              <option>Reading</option>
+              <option>Finished</option>
+            </select>
+          </label>
+          <button type="submit">Add book</button>
+        </form>
+        <p id="message" class="message" role="status"></p>
+      </section>
+
+      <section class="list-section" aria-labelledby="books-heading">
+        <div class="section-heading">
+          <h2 id="books-heading">My books</h2>
+          <span id="book-count" class="count">0 books</span>
+        </div>
+        <div id="book-list" class="book-list" aria-live="polite"></div>
+      </section>
+
+      <p class="note">Editing and sorting are not here yet.</p>
+    </main>
+    <script src="/static/app.js" defer></script>
+  </body>
+</html>

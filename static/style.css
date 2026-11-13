@@ -1,0 +1,202 @@
+:root {
+  color: #24231f;
+  background: #f5f3ed;
+  font-family: Arial, Helvetica, sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+}
+
+.page {
+  width: min(760px, calc(100% - 32px));
+  margin: 48px auto;
+}
+
+.page-header {
+  margin-bottom: 28px;
+}
+
+.eyebrow,
+.note {
+  color: #716e64;
+  font-size: 0.9rem;
+}
+
+h1,
+h2,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  margin-bottom: 8px;
+  font-size: clamp(2rem, 8vw, 3rem);
+}
+
+.intro {
+  color: #626057;
+}
+
+.panel,
+.book-card {
+  border: 1px solid #dedbd1;
+  border-radius: 10px;
+  background: #fffefa;
+}
+
+.panel {
+  padding: 22px;
+}
+
+.panel h2,
+.section-heading h2 {
+  margin-bottom: 16px;
+  font-size: 1.2rem;
+}
+
+form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+label {
+  display: grid;
+  gap: 6px;
+  color: #555249;
+  font-size: 0.9rem;
+}
+
+input,
+select,
+button {
+  min-height: 42px;
+  border: 1px solid #d5d1c6;
+  border-radius: 6px;
+  font: inherit;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 8px 10px;
+  background: white;
+  color: inherit;
+}
+
+button {
+  padding: 8px 14px;
+  border-color: #375c4a;
+  background: #375c4a;
+  color: white;
+  cursor: pointer;
+}
+
+form button {
+  align-self: end;
+}
+
+button:hover {
+  background: #294738;
+}
+
+.message {
+  min-height: 1.2em;
+  margin: 12px 0 0;
+  color: #9a3e32;
+  font-size: 0.9rem;
+}
+
+.list-section {
+  margin-top: 32px;
+}
+
+.section-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.count {
+  color: #716e64;
+  font-size: 0.9rem;
+}
+
+.book-list {
+  display: grid;
+  gap: 10px;
+}
+
+.book-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px;
+}
+
+.book-card h3 {
+  margin: 0 0 5px;
+  font-size: 1rem;
+}
+
+.book-card p {
+  margin: 0;
+  color: #716e64;
+  font-size: 0.9rem;
+}
+
+.book-meta {
+  display: grid;
+  gap: 5px;
+}
+
+.book-status {
+  color: #375c4a;
+  font-size: 0.85rem;
+}
+
+.delete-button {
+  min-height: 34px;
+  border-color: #dedbd1;
+  background: transparent;
+  color: #555249;
+}
+
+.delete-button:hover {
+  background: #f2eee5;
+}
+
+.empty-state {
+  padding: 20px;
+  border: 1px dashed #c9c4b8;
+  border-radius: 8px;
+  color: #716e64;
+  text-align: center;
+}
+
+.note {
+  margin-top: 24px;
+}
+
+@media (max-width: 560px) {
+  .page {
+    margin: 28px auto;
+  }
+
+  form {
+    grid-template-columns: 1fr;
+  }
+
+  .book-card {
+    align-items: flex-start;
+  }
+}
