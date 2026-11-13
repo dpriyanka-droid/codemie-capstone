@@ -1,6 +1,6 @@
 # BookManagementApp
 
-A deliberately small book list app built with HTML, CSS, and JavaScript, a FastAPI backend, and SQLite 3.
+A deliberately small book list app built with HTML, CSS, and JavaScript, a FastAPI backend, and SQLite 3. 
 
 It can list books, add a book, and remove a book. Editing, sorting, and other library features are intentionally left unfinished.
 
