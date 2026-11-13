@@ -19,6 +19,7 @@
 - `static/app.js` loads the list, submits new books, and removes books through the API.
 - The list displays each book's title, author, and reading status.
 - API failures are displayed in the page's status message.
+- Validation errors (`422`) from adding a book show the server's specific message; a `404` on remove refreshes the list and reports that the book was already removed.
 
 ## Data storage
 
