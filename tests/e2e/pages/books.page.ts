@@ -17,6 +17,7 @@ export class BooksPage {
   readonly count: Locator;
   readonly cards: Locator;
   readonly emptyState: Locator;
+  readonly note: Locator;
 
   constructor(readonly page: Page) {
     this.heading = page.getByRole('heading', { level: 1, name: 'BookManagementApp' });
@@ -28,6 +29,7 @@ export class BooksPage {
     this.count = page.locator('#book-count');
     this.cards = page.getByRole('article');
     this.emptyState = page.getByText('No books yet. Add one above to get started.');
+    this.note = page.getByText('Editing and sorting are not here yet.');
   }
 
   async goto(): Promise<void> {

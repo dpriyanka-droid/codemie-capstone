@@ -27,6 +27,18 @@ test.describe('Book list UI', { tag: '@ui' }, () => {
       await expect(booksPage.statusSelect.locator('option')).toHaveText([...READING_STATUSES]);
     });
 
+    test('states that editing and sorting are not available and offers no such controls', async ({
+      booksPage,
+      booksApi,
+    }) => {
+      await booksApi.create(DUNE);
+      await booksPage.goto();
+
+      await expect(booksPage.note).toBeVisible();
+      await expect(booksPage.page.getByRole('button', { name: /edit|sort/i })).toHaveCount(0);
+      await expect(booksPage.page.getByRole('button')).toHaveText(['Add book', 'Remove']);
+    });
+
     test('lists books that already exist, newest first', async ({ booksPage, booksApi }) => {
       await booksApi.create({ title: 'First', author: 'A' });
       await booksApi.create({ title: 'Second', author: 'B' });
@@ -210,6 +222,30 @@ test.describe('Book list UI', { tag: '@ui' }, () => {
       expect(await booksApi.list()).toEqual([]);
     });
 
+    test('server still rejects an over-length author when maxlength is bypassed', async ({ booksPage, booksApi }) => {
+      await booksPage.goto();
+      await booksPage.authorInput.evaluate((el: HTMLInputElement) => el.removeAttribute('maxlength'));
+      await booksPage.addBook({ title: 'Title', author: 'A'.repeat(LIMITS.author + 1) });
+
+      await expect(booksPage.message).toHaveText('Author: String should have at most 120 characters');
+      await expect(booksPage.cards).toHaveCount(0);
+      expect(await booksApi.list()).toEqual([]);
+    });
+
+    test('falls back to a generic error when a 422 response has no readable detail', async ({ booksPage }) => {
+      await booksPage.goto();
+      await booksPage.page.route('**/api/books', (route) =>
+        route.request().method() === 'POST'
+          ? route.fulfill({ status: 422, contentType: 'text/plain', body: 'not json' })
+          : route.fallback(),
+      );
+
+      await booksPage.addBook(DUNE);
+
+      await expect(booksPage.message).toHaveText('Could not add this book.');
+      await expect(booksPage.cards).toHaveCount(0);
+    });
+
     test('typing is capped at the maxlength', async ({ booksPage }) => {
       await booksPage.goto();
 
@@ -324,6 +360,35 @@ test.describe('Book list UI', { tag: '@ui' }, () => {
       await expect(booksPage.message).toHaveText('Could not remove this book.');
       await expect(booksPage.card(DUNE.title)).toBeVisible();
       expect(await booksApi.list()).toHaveLength(1);
+    });
+
+    test('shows an error and keeps the card when the network drops during remove', async ({
+      booksPage,
+      booksApi,
+    }) => {
+      await booksApi.create(DUNE);
+      await booksPage.goto();
+      await booksPage.page.route('**/api/books/*', (route) =>
+        route.request().method() === 'DELETE' ? route.abort('failed') : route.fallback(),
+      );
+
+      await booksPage.removeBook(DUNE.title);
+
+      await expect(booksPage.message).not.toBeEmpty();
+      await expect(booksPage.card(DUNE.title)).toBeVisible();
+      expect(await booksApi.list()).toHaveLength(1);
+    });
+
+    test('clears a previous error message when a book is removed', async ({ booksPage, booksApi }) => {
+      await booksApi.create(DUNE);
+      await booksPage.goto();
+      await booksPage.addBook({ title: '   ', author: 'Someone' });
+      await expect(booksPage.message).toHaveText('Title and author are required.');
+
+      await booksPage.removeBook(DUNE.title);
+
+      await expect(booksPage.emptyState).toBeVisible();
+      await expect(booksPage.message).toBeEmpty();
     });
 
     test('refreshes the list and explains when the book was already removed elsewhere (404)', async ({

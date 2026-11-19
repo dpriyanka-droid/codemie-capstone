@@ -49,6 +49,12 @@ test.describe('Books API', { tag: '@api' }, () => {
       expect(book).toMatchObject({ title: 'Dune', author: 'Herbert', status: 'Reading' });
     });
 
+    test('falls back to the default status when status is blank', async ({ booksApi }) => {
+      const book = await booksApi.create({ title: 'Dune', author: 'Frank Herbert', status: '   ' });
+
+      expect(book.status).toBe(DEFAULT_STATUS);
+    });
+
     test('accepts values exactly at the maximum lengths', async ({ booksApi }) => {
       const book = await booksApi.create({
         title: 'T'.repeat(LIMITS.title),
