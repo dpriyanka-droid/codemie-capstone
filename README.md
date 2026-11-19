@@ -13,4 +13,4 @@ python -m pip install -r requirements.txt
 python -m uvicorn app:app --reload
 ```
 
-Open <http://127.0.0.1:8000>. The SQLite database (`books.db`) is created automatically beside `app.py` when the server starts.
+Open <http://127.0.0.1:8000>. The SQLite database (`books.db`) is created automatically beside `app.py` when the server starts. 
