@@ -53,10 +53,38 @@ async function loadBooks() {
   }
 }
 
+async function validationMessage(response, fallback) {
+  if (response.status !== 422) {
+    return fallback;
+  }
+
+  try {
+    const { detail } = await response.json();
+    if (typeof detail === "string") {
+      return detail;
+    }
+    if (Array.isArray(detail) && detail.length > 0) {
+      const { loc, msg } = detail[0];
+      const field = loc?.at(-1);
+      const label = typeof field === "string" ? `${field[0].toUpperCase()}${field.slice(1)}` : "Book";
+      return `${label}: ${msg}`;
+    }
+  } catch {
+    // The body was not JSON; fall back to the generic message.
+  }
+  return fallback;
+}
+
 async function removeBook(bookId) {
   message.textContent = "";
   try {
     const response = await fetch(`/api/books/${bookId}`, { method: "DELETE" });
+    if (response.status === 404) {
+      // The book is already gone (for example removed in another tab): refresh the stale list.
+      await loadBooks();
+      message.textContent = "This book was already removed.";
+      return;
+    }
     if (!response.ok) {
       throw new Error("Could not remove this book.");
     }
@@ -84,7 +112,7 @@ form.addEventListener("submit", async (event) => {
     });
 
     if (!response.ok) {
-      throw new Error("Could not add this book.");
+      throw new Error(await validationMessage(response, "Could not add this book."));
     }
 
     form.reset();

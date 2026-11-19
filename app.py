@@ -7,7 +7,6 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
-
 BASE_DIR = Path(__file__).resolve().parent
 DATABASE_PATH = BASE_DIR / "books.db"
 

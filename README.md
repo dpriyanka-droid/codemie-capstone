@@ -1,4 +1,4 @@
-# BookManagementApp
+# BookManagementApp 
 
 A deliberately small book list app built with HTML, CSS, and JavaScript, a FastAPI backend, and SQLite 3.
 
@@ -14,3 +14,47 @@ python -m uvicorn app:app --reload
 ```
 
 Open <http://127.0.0.1:8000>. The SQLite database (`books.db`) is created automatically beside `app.py` when the server starts.
+
+## Lint and test locally
+
+Install the development tools (this also installs the app requirements):
+
+```powershell
+python -m pip install -r requirements-dev.txt
+```
+
+Run the linter ([Ruff](https://docs.astral.sh/ruff/), configured in `pyproject.toml`) and the formatting check:
+
+```powershell
+python -m ruff check .
+python -m ruff format --check .
+```
+
+Run the API tests (pytest and FastAPI `TestClient`):
+
+```powershell
+python -m pytest
+```
+
+Each test uses its own temporary SQLite database (the fixture in `tests/conftest.py` points `app.DATABASE_PATH` at a pytest temp directory), so `books.db` is never read or modified.
+
+## End-to-end tests (Playwright)
+
+The browser and API end-to-end suite lives in `tests/e2e/` and is configured by `playwright.config.ts`. Install the Node dependencies and a browser once, then run the suite:
+
+```powershell
+npm ci
+npx playwright install chromium
+npx playwright test
+```
+
+Playwright starts its own server on port 8123 (override with `E2E_PORT`) using a temporary database, so `books.db` is never touched. Only Chromium runs by default; set `E2E_ALL_BROWSERS=1` to also run Firefox and WebKit (install them with `npx playwright install firefox webkit`). Open the HTML report with `npx playwright show-report`.
+
+## Continuous integration
+
+`.github/workflows/ci.yml` runs on every pull request targeting `main` and on every push to `main`. It has two jobs, and any failing step fails the check:
+
+- `lint-and-test`: installs `requirements-dev.txt` on Python 3.12, then runs `ruff check`, `ruff format --check`, and `pytest`.
+- `e2e`: installs `requirements.txt` and the Node dependencies (`npm ci`), installs Chromium, runs `npx playwright test`, and uploads the Playwright report and test results as the `playwright-report` artifact (kept for 7 days).
+
+The workflow only has read access to repository contents.
