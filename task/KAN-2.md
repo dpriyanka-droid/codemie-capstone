@@ -21,8 +21,8 @@
 - Several items are marked **TBD** because PR #3 currently contains only a minimal README change (per PR description).
 
 ## Checklist
-- [ ] CI workflow added (GitHub Actions)
-- [ ] Linting configured (tool TBD)
-- [ ] Automated API tests added (pytest + FastAPI TestClient)
-- [ ] Workflow runs on PRs to `main`
-- [ ] Documentation updated (README/Confluence)
+- [x] CI workflow added (GitHub Actions)
+- [x] Linting configured (Ruff)
+- [x] Automated API tests added (pytest + FastAPI TestClient)
+- [x] Workflow runs on PRs to `main`
+- [x] Documentation updated (README/LLD; Confluence page not updated from here)

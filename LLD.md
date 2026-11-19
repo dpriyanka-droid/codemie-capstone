@@ -21,6 +21,13 @@
 - API failures are displayed in the page's status message.
 - Validation errors (`422`) from adding a book show the server's specific message; a `404` on remove refreshes the list and reports that the book was already removed.
 
+## Testing and CI
+
+- Linting and formatting: Ruff, configured in `pyproject.toml`.
+- API tests: `tests/test_api.py` uses pytest and FastAPI `TestClient`. The fixture in `tests/conftest.py` points `app.DATABASE_PATH` at a temporary SQLite file for each test.
+- End-to-end tests: `tests/e2e/` holds Playwright API and UI specs (`*.api.spec.ts`, `*.ui.spec.ts`). `playwright.config.ts` starts `tests/e2e/serve_e2e.py` on a dedicated port with a temporary database, runs serially, and defaults to Chromium (`E2E_ALL_BROWSERS=1` adds Firefox and WebKit).
+- CI: `.github/workflows/ci.yml` runs on pull requests to `main` and pushes to `main`, with read-only permissions. The `lint-and-test` job runs Ruff and pytest; the `e2e` job runs the Playwright suite and uploads its report.
+
 ## Data storage
 
 SQLite database file: `books.db` beside `app.py`.
